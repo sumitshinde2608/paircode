@@ -112,8 +112,8 @@ export default class Editor extends Component {
         }
         return (
             <MonacoEditor
-                width="800"
-                height="800"
+                width="1200"
+                height="2000"
                 language="typescript"
                 theme="vs-dark"
                 defaultValue=''

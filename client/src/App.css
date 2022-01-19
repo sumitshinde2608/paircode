@@ -1,3 +1,30 @@
 .codearea {
-	border: 10px dashed #f5f5;
+	border-top: 3px solid white;
+	display: flex;
+	/* flex-direction: row; */
+	flex-flow: row wrap;
+	/* height: 95vh; */
+}
+
+.App {
+	font-family: "Righteous", cursive;
+	height: 100vh;
+	width: available;
+	width: 100vw;
+	overflow: hidden;
+	background-color: #081c54;
+	color: #f1f1f1;
+}
+
+.Header {
+	/* background-color: #f1f1f1; */
+	/* padding: 20px; */
+	/* text-align: left; */
+	/* height: 5vh; */
+	font-family: "Righteous", cursive;
+}
+
+.editor {
+	height: 95vh;
+	width: inherit;
 }
