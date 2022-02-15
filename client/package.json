@@ -60,8 +60,7 @@
     "webpack-dev-server": "^4.6.0",
     "webpack-manifest-plugin": "^4.0.2",
     "workbox-webpack-plugin": "^6.4.1",
-    "xterm": "^4.16.0",
-    "xterm-for-react": "^1.0.4"
+    "xterm": "^4.17.0"
   },
   "scripts": {
     "start": "node scripts/start.js",

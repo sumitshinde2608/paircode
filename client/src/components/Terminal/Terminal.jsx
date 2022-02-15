@@ -1,65 +1,65 @@
-import React from 'react'
-// import '../App.css'
-import './Terminal.css'
-import {XTerm} from 'xterm-for-react'
-// import SyntaxHighlighter from 'react-syntax-highlighter';
-// import { dark  } from 'react-syntax-highlighter/dist/esm/styles/hljs';
+// import { TerminalRounded } from "@mui/icons-material";
+import { useEffect } from "react";
+import { Terminal as Xterm } from 'xterm';
+import '../../../node_modules/xterm/css/xterm.css'
 
-class Echo extends React.Component {
-    constructor(props) {
-        super(props)
-        // Create a ref
-        this.xtermRef = React.createRef()
-        
-        this.state = {
-            input: "",
-        }
-    }
+function Terminal() {
 
-    componentDidMount() {
-        // Add the starting text to the terminal
-        this.xtermRef.current.terminal.writeln(
-            "Please enter any string then press enter:"
-        );
-        this.xtermRef.current.terminal.write("echo> ");
-    }
-
-    render() {
-        return (
-            <>
-                {/* Create a new terminal and set it's ref. */}
-                <XTerm
-                    className = 'terminal'
-                    ref={this.xtermRef}
-                    onData={(data) => {
-                        const code = data.charCodeAt(0);
-                        // If the user hits empty and there is something typed echo it.
-                        if (code === 13 && this.state.input.length > 0) {
-                            this.xtermRef.current.terminal.write(
-                                "\r\nYou typed: '" + this.state.input + "'\r\n"
-                            );
-                            this.xtermRef.current.terminal.write("echo> ");
-                            this.setState({input: ""})
-                        } else if (code < 32 || code === 127) { // Disable control Keys such as arrow keys
-                            return;
-                        } 
-						else if (code === 8) { // Backspace	
-							this.setState({input: this.state.input.slice(0, -1)})
-							console.log('backspace triggered')
-                            this.xtermRef.current.terminal.write('\b \b');
-
-						}
-						else { // Add general key press characters to the terminal
-                            this.xtermRef.current.terminal.write(data);
-                            this.setState({input: this.state.input + data})
-                        }
-                    }}
-					options = {{ITheme : 'cursorAccent'},{cursorBlink: true},{cols: 200},{rows: 60}}
-                />
-                
-            </>
+    useEffect(()=>{
+        var curr_line = "";
+      var entries = [];
+        var term = new Xterm()
+        term.open(
+            /* element */ document.getElementById("terminal-div"),
+            /* focus */   true,
         )
-    }
+
+        term.writeln("Welcome to xterm.js")
+
+        term.write("web shell $ ");
+        term.writeln("")
+        
+        term.prompt = () => {
+            if (curr_line) {
+              let data = { method: "command", command: curr_line };
+              curr_line="";
+            //   ws.send(JSON.stringify(data));
+            }
+          };
+          term.prompt();
+          
+          term.onKey(e=> {
+            var ev=e.domEvent,key=e.key;
+            if (ev.keyCode === 13) {
+              // Enter
+              if (curr_line) {
+                entries.push(curr_line);
+                term.write("\r\n");
+                term.write("web shell $ ");
+                term.prompt();
+              }
+            } else if (ev.keyCode === 8) {
+              // Backspace
+              if (curr_line) {
+                curr_line = curr_line.slice(0, curr_line.length - 1);
+                term.write("\b \b");
+              }
+            } else {
+              curr_line += key;
+              term.write(key);
+            }
+          });
+    
+        // paste value
+        //   term.on("paste", function(data) {
+        //     curr_line += data;
+        //     term.write(data);
+        //   });
+    });
+
+    return (
+        <div id="terminal-div" />
+    );
 }
 
-export default Echo
+export default Terminal;
